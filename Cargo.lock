@@ -1477,9 +1477,9 @@ dependencies = [
 
 [[package]]
 name = "tangy-lib"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7875b2aa9e74d8b16f8f874ef422374f3c0a2e1998cd62ddac080ec5cadc2230"
+checksum = "173bdfd379b65526dcc52d8c95944687b958e7388c0095aff2356912819a0c40"
 dependencies = [
  "base64ct",
  "elliptic-curve",
