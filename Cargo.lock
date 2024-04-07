@@ -1478,7 +1478,8 @@ dependencies = [
 [[package]]
 name = "tangy-lib"
 version = "0.1.0"
-source = "git+https://github.com/martynp/tangy-lib#7732986dfd9a951d27ec7d1d01d1ae113bf97cf7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7875b2aa9e74d8b16f8f874ef422374f3c0a2e1998cd62ddac080ec5cadc2230"
 dependencies = [
  "base64ct",
  "elliptic-curve",

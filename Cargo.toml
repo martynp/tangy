@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 rocket = "0.5.0"
-tangy-lib = { git = "https://github.com/martynp/tangy-lib" }
+tangy-lib = "0.1.0"
