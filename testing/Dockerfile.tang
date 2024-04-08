@@ -1,0 +1,7 @@
+FROM ubuntu:22.04
+RUN apt-get update
+RUN apt-get install -y tang socat
+
+RUN mkdir /db
+
+ENTRYPOINT socat TCP4-LISTEN:80,reuseaddr,fork "system:'REMOTE_ADDR=\$SOCAT_PEERADDR /usr/libexec/tangd /db'"
