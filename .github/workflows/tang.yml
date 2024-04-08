@@ -1,9 +1,7 @@
 name: Compare with Official Tang Implementation
 
-on:
-  push:
-    branches:
-      - actions_testing
+on: 
+  push
 
 jobs:
   build-and-run:
