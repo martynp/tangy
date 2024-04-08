@@ -1,0 +1,53 @@
+name: Compare with Official Tang Implementation
+
+on:
+  push:
+    branches:
+      - actions_testing
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@1.77.1
+
+    - name: Build Tangy
+      run: |
+        cargo build --release
+
+    - name: Build Tang Docker image
+      run: |
+        mkdir db
+        docker build -t tang-image -f ./testing/Dockerfile.tang .
+     
+    - name: Run Tang container
+      run: |
+        docker run -d --name tang-container -v ./db:/db -p 8001:80 tang-image
+    
+    - name: Run test
+      run: |
+        sudo apt install -y clevis
+        echo "hello" | clevis encrypt tang '{"url":"http://localhost:8001"}' -y > enc
+        clevis decrypt tang < enc > decrypted
+        cat decrypted
+
+        docker stop tang-container
+
+
+        sudo chmod a+r ./db/*
+        ./target/release/tangy --dir ./db --port 8001 &
+
+        clevis decrypt tang < enc > decrypted2
+        
+        diff decrypted decrypted2
+        retVal=$?
+        if [ $retVal -ne 0 ]; then
+          exit -1
+        fi
+        
+
+        
+
