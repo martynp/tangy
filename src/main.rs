@@ -81,12 +81,16 @@ fn rec(kid: &str, data: &str, tangy_state: &State<TangState>) -> (Status, (Conte
 #[command(version, about, long_about = None)]
 struct Args {
     /// location of certificates database
-    #[arg(short, long, default_value = "db")]
+    #[arg(short, long)]
     dir: std::path::PathBuf,
 
     /// Number of times to greet
     #[arg(short, long, default_value_t = 8000)]
     port: u16,
+
+    /// Server bind address
+    #[arg(short, long, default_value = "0.0.0.0")]
+    address: String
 }
 
 #[launch]
@@ -97,7 +101,9 @@ fn rocket() -> _ {
         state: RwLock::new(TangyLib::init(KeySource::LocalDir(&args.dir)).unwrap()),
     };
 
-    let figment = rocket::Config::figment().merge(("port", args.port));
+    let figment = rocket::Config::figment()
+        .merge(("port", args.port))
+        .merge(("address", args.address));
 
     rocket::custom(figment)
         .manage(tangy_state)
