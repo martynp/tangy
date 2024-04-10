@@ -31,4 +31,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
-          tags: martynp/tangy:${{ github.ref_name }}
+          tags: martynp/tangy:${{ github.ref_name }}, martynp/tangy:latest
