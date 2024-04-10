@@ -1,9 +1,7 @@
-name: Docker Build
+name: Docker Build Unstable Main
 
 on:
   push:
-    tags:        
-      - '*'     # Only run on tags with slashes in
     branches:
       - 'main'
 
@@ -31,6 +29,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64
           push: true
-          tags: martynp/tangy:${{ github.ref_name }}
+          tags: martynp/tangy:unstable

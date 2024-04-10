@@ -17,24 +17,20 @@ fn adv(tangy_state: &State<TangState>) -> (Status, (ContentType, Option<String>)
     let tangy = tangy_state.state.read().unwrap();
 
     match tangy.adv(None) {
-        Ok(a) => {
-            return (
-                Status::Ok,
-                (ContentType::new("application", "jose+json"), Some(a)),
-            );
-        }
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
-            return (
-                Status::NotFound,
-                (ContentType::new("application", "jose+json"), None),
-            );
-        }
-        Err(_) => {
-            return (
-                Status::InternalServerError,
-                (ContentType::new("application", "jose+json"), None),
-            );
-        }
+        Ok(a) => (
+            Status::Ok,
+            (ContentType::new("application", "jose+json"), Some(a)),
+        ),
+
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => (
+            Status::NotFound,
+            (ContentType::new("application", "jose+json"), None),
+        ),
+
+        Err(_) => (
+            Status::InternalServerError,
+            (ContentType::new("application", "jose+json"), None),
+        ),
     }
 }
 
@@ -43,38 +39,45 @@ fn adv_kid(skid: &str, tangy_state: &State<TangState>) -> (Status, (ContentType,
     let tangy = tangy_state.state.read().unwrap();
 
     match tangy.adv(Some(skid)) {
-        Ok(a) => {
-            return (
-                Status::Ok,
-                (ContentType::new("application", "jose+json"), Some(a)),
-            );
-        }
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
-            return (
-                Status::NotFound,
-                (ContentType::new("application", "jose+json"), None),
-            );
-        }
-        Err(_) => {
-            return (
-                Status::InternalServerError,
-                (ContentType::new("application", "jose+json"), None),
-            );
-        }
+        Ok(a) => (
+            Status::Ok,
+            (ContentType::new("application", "jose+json"), Some(a)),
+        ),
+
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => (
+            Status::NotFound,
+            (ContentType::new("application", "jose+json"), None),
+        ),
+        Err(_) => (
+            Status::InternalServerError,
+            (ContentType::new("application", "jose+json"), None),
+        ),
     }
 }
 
 #[post("/rec/<kid>", data = "<data>")]
-fn rec(kid: &str, data: &str, tangy_state: &State<TangState>) -> (Status, (ContentType, String)) {
+fn rec(
+    kid: &str,
+    data: &str,
+    tangy_state: &State<TangState>,
+) -> (Status, (ContentType, Option<String>)) {
     let tangy = tangy_state.state.read().unwrap();
 
-    (
-        Status::Ok,
-        (
-            ContentType::new("application", "jwk+json"),
-            tangy.rec(&kid, &data).unwrap(),
+    match tangy.rec(kid, data) {
+        Ok(r) => (
+            Status::Ok,
+            (ContentType::new("application", "jwk+json"), Some(r)),
         ),
-    )
+
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => (
+            Status::NotFound,
+            (ContentType::new("application", "jose+json"), None),
+        ),
+        Err(_) => (
+            Status::InternalServerError,
+            (ContentType::new("application", "jose+json"), None),
+        ),
+    }
 }
 
 #[derive(Parser, Debug)]
@@ -90,7 +93,7 @@ struct Args {
 
     /// Server bind address
     #[arg(short, long, default_value = "0.0.0.0")]
-    address: String
+    address: String,
 }
 
 #[launch]
