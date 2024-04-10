@@ -4,8 +4,6 @@ on:
   push:
     tags:        
       - '*'     # Only run on tags with slashes in
-    branches:
-      - 'main'
 
 jobs:
   docker:
