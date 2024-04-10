@@ -1,11 +1,12 @@
 [package]
 name = "tangy"
 description = "Tang server implementation"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["Martyn P <martyn@datasync.dev>"]
 repository = "https://github.com/martynp/tangy"
+readme = "readme.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
