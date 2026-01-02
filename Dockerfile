@@ -1,4 +1,4 @@
-FROM rust:1.81.0-slim-bookworm as builder
+FROM rust:1.85.1-slim-bookworm AS builder
 
 COPY . /workspace/
 RUN cd /workspace/ && cargo build --release
